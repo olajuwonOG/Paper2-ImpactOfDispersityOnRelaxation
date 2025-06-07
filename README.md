@@ -9,6 +9,6 @@ radiusOfGyration_Deform.py  - radius of gyration for deforming chains
 radiusOfGyration_relaxation.py - radius of gyration for chain relaxation (parellel and perpendicular)
 Static_Struct_Factor.py - single chain static structure factor code (parallel and perpendicular)
 Orientation_test_Chain.py - Hermans Orientation parameter for test chains
-Gprime_Gprimeprime.py - storage and loss modulus calculations
+Gprime_Gprimeprime.py - storage and loss modulus calculations from equilibrium stress data
 
 
