@@ -1,0 +1,89 @@
+################ Setup ####################
+
+units       lj
+atom_style  full
+bond_style  fene
+angle_style	cosine
+pair_style      lj/cut 2.5
+
+#read_restart	imers.restart.813694976
+read_data input.data
+
+#bond_style  fene
+bond_coeff  1 30.0 1.5 1.0 1.0
+special_bonds fene
+
+#angle_style	cosine
+angle_coeff	1 1.5
+
+#pair_style      lj/cut 2.5
+pair_modify     shift yes
+pair_coeff      * * 1.0 1.0
+
+improper_style none
+
+neighbor    1.0 bin 
+neigh_modify every 1 delay 0 check no  # Ensure the neighbor list is updated every timestep
+
+timestep    0.01
+
+thermo      1000
+thermo_style custom step temp press ke pe ebond evdwl lx ly lz pxx pyy pzz
+
+################# Deformation ##################
+
+run 0
+variable tmp equal "lz"
+variable L0 equal ${tmp}
+variable strain equal "(lz - v_L0)/v_L0"
+variable stretch_ratio equal "lz/v_L0"
+variable p1 equal "v_strain"
+variable p2 equal "-pxx"
+variable p3 equal "-pyy"
+variable p4 equal "-pzz"
+variable p5 equal "lx"
+variable p6 equal "ly"
+variable p7 equal "lz"
+variable p8 equal "temp"
+variable t2 equal "epair"
+variable t3 equal "ebond"
+variable t4 equal "eangle"
+variable t5 equal "edihed"
+variable t9 equal "step"
+variable p9 equal "v_stretch_ratio"
+
+#fix 1 all npt temp 1.0 1.0 1.0 y 0.0 0.0 10.0 z 0.0 0.0 10.0  # Maintain constant pressure in y and z
+
+fix 1 all npt temp 1.0 1.0 1.0 y 0.0 0.0 10.0 x 0.0 0.0 10.0  # Maintain constant pressure in y and z
+
+#fix		1 all nvt/sllod temp 1.0 1.0 1.0 tchain 1
+
+# Apply uniaxial extensional flow in the x direction using the erate keyword
+#fix 2 all deform 1 x erate 0.0003 remap v  # Apply strain rate of 0.003
+
+fix 2 all deform 1 z trate 0.000065  remap v # x volume y volume
+
+fix def2 all print 500 "${p1} ${p2} ${p3} ${p4} ${p5} ${p6} ${p7} ${p8} ${t9} ${p9}" file def2_fast.txt screen no
+fix def3 all print 20000 "${p1} ${t2} ${t3} ${t4} ${t5} ${p9}" file def3_fast.txt screen no
+
+################# Dumping ##################
+
+reset_timestep 0
+variable f file python.txt
+variable s equal next(f)
+dump dump1 all custom 20000 production.dump id mol type xs ys zs ix iy iz 
+dump_modify dump1 sort id  # Sort per-atom lines by atom ID
+dump_modify dump1 every 20000  # Output frequency
+dump_modify dump1 append yes
+
+#dump_modify dump1 every v_s
+#dump_modify dump1 append yes
+
+#restart 37000 imers.restart
+restart 1048576 imers.restart
+
+# Run the simulation for 35,836 steps to achieve the desired strain
+#run 3650000
+run 5000000
+
+write_data final.data

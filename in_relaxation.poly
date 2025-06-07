@@ -1,0 +1,67 @@
+################ Setup ####################
+
+units       lj
+atom_style  full
+#bond_style  fene
+#angle_style	cosine
+#pair_style      lj/cut 2.5
+
+read_restart		imers.restart.52428800 #imers.restart.4194304
+#read_data input.data
+
+bond_style  fene
+bond_coeff  1 30.0 1.5 1.0 1.0
+special_bonds fene
+
+angle_style	cosine
+angle_coeff	1 1.5
+
+pair_style      lj/cut 2.5
+pair_modify     shift yes
+pair_coeff      * * 1.0 1.0
+
+improper_style none
+
+neighbor    1.0 bin 
+neigh_modify every 1 delay 0 check no  # Ensure the neighbor list is updated every timestep
+
+timestep    0.01
+
+thermo      1000
+thermo_style custom step temp press ke pe ebond evdwl lx ly lz pxx pyy pzz
+
+
+# ---------- Langevin Thermostat ----------
+variable        T equal 1.0
+variable        damp_factor equal 1.0       # damping parameter for Langevin thermostat (adjustable)
+fix             1 all langevin ${T} ${T} ${damp_factor} 904297
+fix             2 all nve
+
+
+
+
+################# Dumping ##################
+
+#reset_timestep	0
+
+variable f file python.txt
+
+variable s equal next(f)
+
+dump dump3 all custom 1000 production.dump id mol type q xs ys zs ix iy iz
+
+dump_modify dump3 sort id #sort per-atom lines by atom ID
+
+dump_modify dump3 every v_s
+
+dump_modify dump3 append yes
+
+restart 1048576 imers.restart
+
+run	669240000
+
+write_data final.data
+
+
+
+
