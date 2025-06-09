@@ -13,7 +13,7 @@ Codes (Lammps and Python) for Impact of Dispersity on the Relaxation of Entangle
 
 ◦ radiusOfGyration_relaxation.py – Radius of gyration during chain relaxation (parallel and perpendicular components)
 
-◦ Static_Struct_Factor.py – Single-chain static structure factor computation (parallel and perpendicular)
+◦ Static_Struct_Factor.py – Single-chain static structure factor analysis (parallel and perpendicular)
 
 ◦ Orientation_test_Chain.py – Hermans orientation parameter calculation for test chains
 
