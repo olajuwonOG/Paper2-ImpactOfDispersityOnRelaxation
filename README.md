@@ -9,9 +9,7 @@ Codes (Lammps and Python) for Impact of Dispersity on the Relaxation of Entangle
 
 ◦ in_relaxation.poly – LAMMPS script for relaxation
 
-◦ radiusOfGyration_Deform.py – Radius of gyration calculation for deforming chains
-
-◦ radiusOfGyration_relaxation.py – Radius of gyration during chain relaxation (parallel and perpendicular components)
+◦ radiusOfGyration_Deform.py – Radius of gyration calculation for deforming chains and relaxing chains
 
 ◦ Static_Struct_Factor.py – Single-chain static structure factor analysis (parallel and perpendicular)
 
