@@ -17,4 +17,4 @@ Codes (Lammps and Python) for Impact of Dispersity on the Relaxation of Entangle
 
 ◦ Gprime_Gprimeprime.py – Storage and loss modulus calculations from equilibrium stress data
 
-
+*** We use the Z1+ code to calculate relevant entanglement properties (contour length of the primitive path Lpp, entanglement length Ne, and Number of entanglement) --- https://www.sciencedirect.com/science/article/pii/S0010465522002867#se0020
